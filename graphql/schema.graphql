@@ -5,6 +5,27 @@ schema {
     mutation: Mutation
 }
 
+type ListParams {
+    direction: String
+    page: Int
+    perPage: Int
+    search: String
+    sort: String
+}
+
+type PaymentMethod {
+    createdAt: String!
+    id: ID!
+    name: String!
+    paymentTerm: [Int]!
+    updatedAt: String!
+}
+
+input PaymentMethodInput {
+    name: String!
+    paymentTerm: [Int]!
+}
+
 " An Address "
 type Address {
     city: String!
@@ -13,15 +34,6 @@ type Address {
     state: String
     street: String!
     zipCode: String
-}
-
-" A Currency "
-type Currency {
-    code: String!
-    createdAt: String!
-    id: ID!
-    name: String!
-    updatedAt: String!
 }
 
 " A Customer "
@@ -38,83 +50,71 @@ type Customer {
     updatedAt: String!
 }
 
-type Mutation {
-    _: Boolean
-    deleteCurrency(id: ID!): Boolean
-    deletePaymentForm(id: ID!): Boolean
-    deletePaymentMethod(id: ID!): Boolean
-    saveCurrency(input: CurrencyInput!): Currency!
-    saveCustomer(input: CustomerInput!): Customer!
-    savePaymentForm(input: PaymentFormInput!): PaymentForm!
-    savePaymentMethod(input: PaymentMethodInput!): PaymentMethod!
-    updateCurrency(id: ID!, input: CurrencyInput!): Currency!
-    updatePaymentForm(id: ID!, input: PaymentFormInput!): PaymentForm!
-    updatePaymentMethod(id: ID!, input: PaymentMethodInput!): PaymentMethod!
+type Product {
+    id: ID!
+    code: String!
+    name: String!
+    height: Float!
+    width: Float!
+    depth: Float!
+    unit: String!
+    updatedAt: String!
+    createdAt: String!
+    deletedAt: String!
 }
 
-" A PaymentForm "
-type PaymentForm {
-    createdAt: String!
+type Salesperson {
     id: ID!
     name: String!
+    createdAt: String!
     updatedAt: String!
+    deletedAt: String!
 }
 
-" A PaymentMethod "
-type PaymentMethod {
-    createdAt: String!
+type Order {
     id: ID!
-    name: String!
-    paymentTerm: [Int]!
+    number: Int!
+    salesperson: Salesperson!
+    customer: Customer!
+    createdAt: String!
     updatedAt: String!
+    canceledAt: String!
+}
+
+input OrderInput {
+    number: Int!
+    salespersonId: ID!
+    customerId: ID!
+}
+
+input ProductInput {
+    code: String!
+    name: String!
+    height: Float!
+    width: Float!
+    depth: Float!
+    unit: String!
 }
 
 type Query {
     _: Boolean
-    currencies(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [Currency]!
-    currencyById(id: ID!): Currency!
-    customerById(id: ID!): Customer!
-    customers(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [Customer]!
-    paymentFormById(id: ID!): PaymentForm!
-    paymentForms(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [PaymentForm]!
+    orderById(id: ID!): Order!
+    orders(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [Order]!
+    productById(id: ID!): Product!
+    products(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [Product]!
     paymentMethodById(id: ID!): PaymentMethod!
     paymentMethods(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [PaymentMethod]!
 }
 
-" A input to persist an Address of Customer "
-input AddressInput {
-    city: String!
-    country: String!
-    neighborhood: String
-    state: String
-    streetName: String!
-    zipCode: String
-}
+type Mutation {
+    _: Boolean
+    deleteProduct(id: ID!): Boolean
+    saveProduct(input: ProductInput!): Product!
+    updateProduct(id: ID!, input: ProductInput!): Product!
 
-" A input to persist a Currency "
-input CurrencyInput {
-    code: String!
-    name: String!
-}
+    saveOrder(input: OrderInput!): Order!
 
-" A input to persist a Customer "
-input CustomerInput {
-    address: AddressInput!
-    document: String!
-    email: String!
-    isActive: Boolean!
-    name: String!
-    phone: String!
-    type: String!
-}
-
-" A input to persist a Payment Form "
-input PaymentFormInput {
-    name: String!
-}
-
-" A input to persist a Payment Method "
-input PaymentMethodInput {
-    name: String!
-    paymentTerm: [Int]!
+    deletePaymentMethod(id: ID!): Boolean
+    savePaymentMethod(input: PaymentMethodInput!): PaymentMethod!
+    updatePaymentMethod(id: ID!, input: PaymentMethodInput!): PaymentMethod!
 }
