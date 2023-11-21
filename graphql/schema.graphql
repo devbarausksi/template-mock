@@ -96,6 +96,10 @@ input ProductInput {
     unit: String!
 }
 
+input SalespersonInput {
+    name: String!
+}
+
 type Query {
     _: Boolean
     orderById(id: ID!): Order!
@@ -117,10 +121,6 @@ type Mutation {
     updateProduct(id: ID!, input: ProductInput!): Product!
 
     saveOrder(input: OrderInput!): Order!
-
-    saveSalesperson(name: String!): Salesperson!
-    updateSalesperson(id: ID!, name: String!): Salesperson!
-    deleteSalesperson(id: ID!): Boolean
 
     deletePaymentMethod(id: ID!): Boolean
     savePaymentMethod(input: PaymentMethodInput!): PaymentMethod!
