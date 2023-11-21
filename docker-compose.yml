@@ -1,6 +1,23 @@
 version: "3.8"
 
 services:
+  mocker:
+    image: node:18
+    container_name: ksm-mocker
+    command: sh .docker/entrypoint.dev.sh
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    volumes:
+      - ./:/app
+    ports:
+      - "4000:4000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
   mysql:
     container_name: ksm-mysql
     image: mysql:8.0
@@ -9,5 +26,10 @@ services:
       - MYSQL_DATABASE=kgp_sales
     security_opt:
       - seccomp:unconfined
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
     ports:
       - "3336:3306"
