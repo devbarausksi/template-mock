@@ -41,3 +41,5 @@ yarn-error.log*
 
 # git
 .history
+
+src/types/graphql.ts
