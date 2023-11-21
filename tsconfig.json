@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
     "rootDir": "./src",
-    "target": "es2016",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "module": "commonjs",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noUncheckedIndexedAccess": true,
+    "target": "es2018",
+    "sourceMap": true,
   },
   "include": [
     "./src/**/*"
+  ],
+  "exclude": [
+    "./node_modules",
+    "./dist"
   ]
 }
