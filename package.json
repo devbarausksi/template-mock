@@ -10,7 +10,7 @@
     "codegen:watch": "graphql-codegen --config codegen.ts --watch",
     "prepare": "husky install",
     "db:push": "prisma db push --force-reset",
-    "db:seed": "prisma db seed",
+    "db:seed": "tsc --allowJs prisma/seed.ts && cat prisma/seed.js | node && rm prisma/seed.js",
     "db:reset": "npm run db:push && npm run db:seed"
   },
   "dependencies": {
@@ -44,7 +44,6 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "husky": "^8.0.0",
-    "prisma-erd-generator": "^1.11.1",
     "rimraf": "^5.0.5",
     "typescript": "^5.3.2"
   },
