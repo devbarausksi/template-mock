@@ -1,7 +1,26 @@
 import { faker } from '@faker-js/faker'
 import { PrismaClient } from '@prisma/client'
+import {SalespersonInput} from "../src/types";
 
 const prisma = new PrismaClient()
+
+async function seedSalesperson(length: number = 100) {
+  const data = Array.from({ length }).map((): SalespersonInput => ({
+    name: faker.person.fullName(),
+
+  }))
+
+  const salespersons = []
+
+  for (const salesperson of data) {
+    const newSalesperson = await prisma.salesperson.create({
+      data: salesperson as any,
+    })
+    salespersons.push(newSalesperson)
+  }
+
+  return salespersons
+}
 
 async function seedCustomers(length: number = 100) {
   const data = Array.from({ length }).map(() => ({
@@ -183,11 +202,10 @@ async function main() {
     prisma.price_item.deleteMany(),
     prisma.payment_method.deleteMany(),
     prisma.payment_form.deleteMany(),
+    prisma.salesperson.deleteMany(),
   ])
 
-  // const lenCustomers = 100
-  // const lenAddresses = 2
-
+  await seedSalesperson(10)
   await seedProducts(100)
   // await seedCurrency()
   //
