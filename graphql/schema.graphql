@@ -1,0 +1,120 @@
+# This file was generated. Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+" An Address "
+type Address {
+    city: String!
+    country: String!
+    neighborhood: String
+    state: String
+    street: String!
+    zipCode: String
+}
+
+" A Currency "
+type Currency {
+    code: String!
+    createdAt: String!
+    id: ID!
+    name: String!
+    updatedAt: String!
+}
+
+" A Customer "
+type Customer {
+    addresses: [Address]!
+    createdAt: String!
+    document: String!
+    email: String!
+    id: ID!
+    isActive: Boolean!
+    name: String!
+    phone: String!
+    type: String!
+    updatedAt: String!
+}
+
+type Mutation {
+    _: Boolean
+    deleteCurrency(id: ID!): Boolean
+    deletePaymentForm(id: ID!): Boolean
+    deletePaymentMethod(id: ID!): Boolean
+    saveCurrency(input: CurrencyInput!): Currency!
+    saveCustomer(input: CustomerInput!): Customer!
+    savePaymentForm(input: PaymentFormInput!): PaymentForm!
+    savePaymentMethod(input: PaymentMethodInput!): PaymentMethod!
+    updateCurrency(id: ID!, input: CurrencyInput!): Currency!
+    updatePaymentForm(id: ID!, input: PaymentFormInput!): PaymentForm!
+    updatePaymentMethod(id: ID!, input: PaymentMethodInput!): PaymentMethod!
+}
+
+" A PaymentForm "
+type PaymentForm {
+    createdAt: String!
+    id: ID!
+    name: String!
+    updatedAt: String!
+}
+
+" A PaymentMethod "
+type PaymentMethod {
+    createdAt: String!
+    id: ID!
+    name: String!
+    paymentTerm: [Int]!
+    updatedAt: String!
+}
+
+type Query {
+    _: Boolean
+    currencies(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [Currency]!
+    currencyById(id: ID!): Currency!
+    customerById(id: ID!): Customer!
+    customers(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [Customer]!
+    paymentFormById(id: ID!): PaymentForm!
+    paymentForms(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [PaymentForm]!
+    paymentMethodById(id: ID!): PaymentMethod!
+    paymentMethods(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [PaymentMethod]!
+}
+
+" A input to persist an Address of Customer "
+input AddressInput {
+    city: String!
+    country: String!
+    neighborhood: String
+    state: String
+    streetName: String!
+    zipCode: String
+}
+
+" A input to persist a Currency "
+input CurrencyInput {
+    code: String!
+    name: String!
+}
+
+" A input to persist a Customer "
+input CustomerInput {
+    address: AddressInput!
+    document: String!
+    email: String!
+    isActive: Boolean!
+    name: String!
+    phone: String!
+    type: String!
+}
+
+" A input to persist a Payment Form "
+input PaymentFormInput {
+    name: String!
+}
+
+" A input to persist a Payment Method "
+input PaymentMethodInput {
+    name: String!
+    paymentTerm: [Int]!
+}

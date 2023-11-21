@@ -1,0 +1,182 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator erd {
+  provider    = "prisma-erd-generator"
+  output      = "./erd.svg"
+  ignoreEnums = true
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model address {
+  id           String    @id @default(uuid())
+  street_name  String
+  city         String
+  country      String
+  neighborhood String?
+  state        String?
+  number       String?
+  complement   String?
+  zip_code     String
+  is_default   Boolean   @default(false)
+  customer     customer? @relation(fields: [customer_id], references: [id])
+  customer_id  String?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime? @updatedAt
+  deleted_at   DateTime?
+}
+
+model customer {
+  id          String    @id @default(uuid())
+  name        String
+  email       String
+  document    String    @unique
+  phone       String
+  observation String?
+  is_active   Boolean   @default(true)
+  addresses   address[]
+  order       order[]
+  created_at  DateTime  @default(now())
+  updated_at  DateTime? @updatedAt
+  deleted_at  DateTime?
+}
+
+model currency {
+  id             String          @id @default(uuid())
+  name           String
+  code           String
+  princing_table pricing_table[]
+  created_at     DateTime        @default(now())
+  updated_at     DateTime?       @updatedAt
+}
+
+model pricing_table {
+  id          String       @id @default(uuid())
+  code        String
+  name        String
+  is_default  Boolean      @default(false)
+  valid_from  DateTime?
+  valid_to    DateTime?
+  price_item  price_item[]
+  order       order[]
+  currency    currency?    @relation(fields: [currency_id], references: [id])
+  currency_id String?
+  created_at  DateTime     @default(now())
+  updated_at  DateTime?    @updatedAt
+  deleted_at  DateTime?
+}
+
+model product {
+  id         String       @id @default(uuid())
+  code       String
+  name       String
+  height     Float
+  width      Float
+  depth      Float
+  unit       String
+  price_item price_item[]
+  order_item order_item[]
+  created_at DateTime     @default(now())
+  updated_at DateTime?    @updatedAt
+  deleted_at DateTime?
+}
+
+model price_item {
+  id               String         @id @default(uuid())
+  price            Float
+  pricing_table    pricing_table? @relation(fields: [pricing_table_id], references: [id])
+  pricing_table_id String?
+  product          product?       @relation(fields: [product_id], references: [id])
+  product_id       String?
+}
+
+model payment_method {
+  id         String    @id @default(uuid())
+  name       String
+  is_manual  Boolean
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  order      order[]
+}
+
+model payment_form {
+  id          String    @id @default(uuid())
+  description String
+  is_active   Boolean
+  order       order[]
+  created_at  DateTime  @default(now())
+  updated_at  DateTime? @updatedAt
+}
+
+model salesperson {
+  id         String    @id @default(uuid())
+  name       String
+  order      order[]
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  deleted_at DateTime?
+}
+
+model part_list {
+  id            String      @id @default(uuid())
+  annotation    String
+  height        Float
+  width         Float
+  depth         Float
+  order_item    order_item? @relation(fields: [order_item_id], references: [id])
+  order_item_id String?
+}
+
+model order_item {
+  id          String @id @default(uuid())
+  quantity    Float
+  price_net   Float
+  price_total Float
+  discount    Int
+
+  increase   Int
+  order      order?      @relation(fields: [order_id], references: [id])
+  order_id   String?
+  part_list  part_list[]
+  product    product?    @relation(fields: [product_id], references: [id])
+  product_id String?
+}
+
+model order_freight {
+  id         String    @id @default(uuid())
+  price      Float
+  order      order?    @relation(fields: [order_id], references: [id])
+  order_id   String?
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  deleted_at DateTime?
+}
+
+model order {
+  id                String          @id @default(uuid())
+  number            Int             @default(autoincrement())
+  salesperson       salesperson     @relation(fields: [salesperson_id], references: [id])
+  salesperson_id    String
+  items             order_item[]
+  order_freight     order_freight[]
+  created_at        DateTime        @default(now())
+  updated_at        DateTime?       @updatedAt
+  canceled_at       DateTime?
+  annotation        String?
+  customer          customer?       @relation(fields: [customer_id], references: [id])
+  customer_id       String?
+  payment_method    payment_method? @relation(fields: [payment_method_id], references: [id])
+  payment_method_id String?
+  payment_form      payment_form?   @relation(fields: [payment_form_id], references: [id])
+  payment_form_id   String?
+  pricing_table     pricing_table?  @relation(fields: [pricing_table_id], references: [id])
+  pricing_table_id  String?
+}
