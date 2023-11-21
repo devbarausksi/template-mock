@@ -108,7 +108,7 @@ async function seedPriceItem() {
   const products = await prisma.product.findMany()
   const pricingTable = await prisma.pricing_table.findFirst()
 
-  const data = products.map((product) => ({
+  const data = products.map((product: { id: any }) => ({
     price: faker.number.float({ max: 1000, min: 0 }),
     pricing_table_id: pricingTable!.id,
     product_id: product.id,
@@ -185,30 +185,30 @@ async function main() {
     prisma.payment_form.deleteMany(),
   ])
 
-  const lenCustomers = 100
-  const lenAddresses = 2
+  // const lenCustomers = 100
+  // const lenAddresses = 2
 
   await seedProducts(100)
-  await seedCurrency()
-
-  const currencies = await prisma.currency.findMany()
-
-  for (const currency of currencies) {
-    await seedPricing(20, currency.id)
-  }
-
-  await seedPriceItem()
-
-  await seedPaymentMethod()
-  await seedPaymentForm()
-
-  await seedProducts(100)
-
-  const customers = await seedCustomers(lenCustomers)
-
-  for (const customer of customers) {
-    await seedAddresses(lenAddresses, customer.id)
-  }
+  // await seedCurrency()
+  //
+  // const currencies = await prisma.currency.findMany()
+  //
+  // for (const currency of currencies) {
+  //   await seedPricing(20, currency.id)
+  // }
+  //
+  // await seedPriceItem()
+  //
+  // await seedPaymentMethod()
+  // await seedPaymentForm()
+  //
+  // await seedProducts(100)
+  //
+  // const customers = await seedCustomers(lenCustomers)
+  //
+  // for (const customer of customers) {
+  //   await seedAddresses(lenAddresses, customer.id)
+  // }
 }
 
 main()

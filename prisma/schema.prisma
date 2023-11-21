@@ -8,11 +8,12 @@ generator erd {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -87,6 +88,8 @@ model product {
   created_at DateTime     @default(now())
   updated_at DateTime?    @updatedAt
   deleted_at DateTime?
+
+  @@fulltext([name, code])
 }
 
 model price_item {
@@ -136,18 +139,17 @@ model part_list {
 }
 
 model order_item {
-  id          String @id @default(uuid())
+  id          String      @id @default(uuid())
   quantity    Float
   price_net   Float
   price_total Float
   discount    Int
-
-  increase   Int
-  order      order?      @relation(fields: [order_id], references: [id])
-  order_id   String?
-  part_list  part_list[]
-  product    product?    @relation(fields: [product_id], references: [id])
-  product_id String?
+  increase    Int
+  order       order?      @relation(fields: [order_id], references: [id])
+  order_id    String?
+  part_list   part_list[]
+  product     product?    @relation(fields: [product_id], references: [id])
+  product_id  String?
 }
 
 model order_freight {
@@ -162,7 +164,7 @@ model order_freight {
 
 model order {
   id                String          @id @default(uuid())
-  number            Int             @default(autoincrement())
+  number            Int
   salesperson       salesperson     @relation(fields: [salesperson_id], references: [id])
   salesperson_id    String
   items             order_item[]
