@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { type ListParams } from '@/types'
+import { type ListParams } from '../types'
 
 const schema = z.object({
   direction: z.enum(['asc', 'desc']).default('asc'),
