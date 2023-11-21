@@ -100,6 +100,10 @@ type Query {
     _: Boolean
     orderById(id: ID!): Order!
     orders(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [Order]!
+
+    salespersonById(id: ID!): Salesperson!
+    salesperson(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [Salesperson]!
+
     productById(id: ID!): Product!
     products(direction: String = "asc", page: Int = 0, perPage: Int = 10, search: String = "", sort: String = "name"): [Product]!
     paymentMethodById(id: ID!): PaymentMethod!
@@ -113,6 +117,10 @@ type Mutation {
     updateProduct(id: ID!, input: ProductInput!): Product!
 
     saveOrder(input: OrderInput!): Order!
+
+    saveSalesperson(name: String!): Salesperson!
+    updateSalesperson(id: ID!, name: String!): Salesperson!
+    deleteSalesperson(id: ID!): Boolean
 
     deletePaymentMethod(id: ID!): Boolean
     savePaymentMethod(input: PaymentMethodInput!): PaymentMethod!
