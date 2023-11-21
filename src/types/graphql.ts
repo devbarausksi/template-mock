@@ -27,32 +27,6 @@ export type Address = {
   zipCode?: Maybe<Scalars['String']['output']>;
 };
 
-/**  A input to persist an Address of Customer  */
-export type AddressInput = {
-  city: Scalars['String']['input'];
-  country: Scalars['String']['input'];
-  neighborhood?: InputMaybe<Scalars['String']['input']>;
-  state?: InputMaybe<Scalars['String']['input']>;
-  streetName: Scalars['String']['input'];
-  zipCode?: InputMaybe<Scalars['String']['input']>;
-};
-
-/**  A Currency  */
-export type Currency = {
-  __typename?: 'Currency';
-  code: Scalars['String']['output'];
-  createdAt: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  updatedAt: Scalars['String']['output'];
-};
-
-/**  A input to persist a Currency  */
-export type CurrencyInput = {
-  code: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
 /**  A Customer  */
 export type Customer = {
   __typename?: 'Customer';
@@ -68,40 +42,25 @@ export type Customer = {
   updatedAt: Scalars['String']['output'];
 };
 
-/**  A input to persist a Customer  */
-export type CustomerInput = {
-  address: AddressInput;
-  document: Scalars['String']['input'];
-  email: Scalars['String']['input'];
-  isActive: Scalars['Boolean']['input'];
-  name: Scalars['String']['input'];
-  phone: Scalars['String']['input'];
-  type: Scalars['String']['input'];
+export type ListParams = {
+  __typename?: 'ListParams';
+  direction?: Maybe<Scalars['String']['output']>;
+  page?: Maybe<Scalars['Int']['output']>;
+  perPage?: Maybe<Scalars['Int']['output']>;
+  search?: Maybe<Scalars['String']['output']>;
+  sort?: Maybe<Scalars['String']['output']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']['output']>;
-  deleteCurrency?: Maybe<Scalars['Boolean']['output']>;
-  deletePaymentForm?: Maybe<Scalars['Boolean']['output']>;
   deletePaymentMethod?: Maybe<Scalars['Boolean']['output']>;
-  saveCurrency: Currency;
-  saveCustomer: Customer;
-  savePaymentForm: PaymentForm;
+  deleteProduct?: Maybe<Scalars['Boolean']['output']>;
+  saveOrder: Order;
   savePaymentMethod: PaymentMethod;
-  updateCurrency: Currency;
-  updatePaymentForm: PaymentForm;
+  saveProduct: Product;
   updatePaymentMethod: PaymentMethod;
-};
-
-
-export type MutationDeleteCurrencyArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type MutationDeletePaymentFormArgs = {
-  id: Scalars['ID']['input'];
+  updateProduct: Product;
 };
 
 
@@ -110,18 +69,13 @@ export type MutationDeletePaymentMethodArgs = {
 };
 
 
-export type MutationSaveCurrencyArgs = {
-  input: CurrencyInput;
+export type MutationDeleteProductArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
-export type MutationSaveCustomerArgs = {
-  input: CustomerInput;
-};
-
-
-export type MutationSavePaymentFormArgs = {
-  input: PaymentFormInput;
+export type MutationSaveOrderArgs = {
+  input: OrderInput;
 };
 
 
@@ -130,15 +84,8 @@ export type MutationSavePaymentMethodArgs = {
 };
 
 
-export type MutationUpdateCurrencyArgs = {
-  id: Scalars['ID']['input'];
-  input: CurrencyInput;
-};
-
-
-export type MutationUpdatePaymentFormArgs = {
-  id: Scalars['ID']['input'];
-  input: PaymentFormInput;
+export type MutationSaveProductArgs = {
+  input: ProductInput;
 };
 
 
@@ -147,21 +94,29 @@ export type MutationUpdatePaymentMethodArgs = {
   input: PaymentMethodInput;
 };
 
-/**  A PaymentForm  */
-export type PaymentForm = {
-  __typename?: 'PaymentForm';
+
+export type MutationUpdateProductArgs = {
+  id: Scalars['ID']['input'];
+  input: ProductInput;
+};
+
+export type Order = {
+  __typename?: 'Order';
+  canceledAt: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
+  customer: Customer;
   id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
+  number: Scalars['Int']['output'];
+  salesperson: Salesperson;
   updatedAt: Scalars['String']['output'];
 };
 
-/**  A input to persist a Payment Form  */
-export type PaymentFormInput = {
-  name: Scalars['String']['input'];
+export type OrderInput = {
+  customerId: Scalars['ID']['input'];
+  number: Scalars['Int']['input'];
+  salespersonId: Scalars['ID']['input'];
 };
 
-/**  A PaymentMethod  */
 export type PaymentMethod = {
   __typename?: 'PaymentMethod';
   createdAt: Scalars['String']['output'];
@@ -171,60 +126,52 @@ export type PaymentMethod = {
   updatedAt: Scalars['String']['output'];
 };
 
-/**  A input to persist a Payment Method  */
 export type PaymentMethodInput = {
   name: Scalars['String']['input'];
   paymentTerm: Array<InputMaybe<Scalars['Int']['input']>>;
 };
 
+export type Product = {
+  __typename?: 'Product';
+  code: Scalars['String']['output'];
+  createdAt: Scalars['String']['output'];
+  deletedAt: Scalars['String']['output'];
+  depth: Scalars['Float']['output'];
+  height: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  unit: Scalars['String']['output'];
+  updatedAt: Scalars['String']['output'];
+  width: Scalars['Float']['output'];
+};
+
+export type ProductInput = {
+  code: Scalars['String']['input'];
+  depth: Scalars['Float']['input'];
+  height: Scalars['Float']['input'];
+  name: Scalars['String']['input'];
+  unit: Scalars['String']['input'];
+  width: Scalars['Float']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']['output']>;
-  currencies: Array<Maybe<Currency>>;
-  currencyById: Currency;
-  customerById: Customer;
-  customers: Array<Maybe<Customer>>;
-  paymentFormById: PaymentForm;
-  paymentForms: Array<Maybe<PaymentForm>>;
+  orderById: Order;
+  orders: Array<Maybe<Order>>;
   paymentMethodById: PaymentMethod;
   paymentMethods: Array<Maybe<PaymentMethod>>;
+  productById: Product;
+  products: Array<Maybe<Product>>;
 };
 
 
-export type QueryCurrenciesArgs = {
-  direction?: InputMaybe<Scalars['String']['input']>;
-  page?: InputMaybe<Scalars['Int']['input']>;
-  perPage?: InputMaybe<Scalars['Int']['input']>;
-  search?: InputMaybe<Scalars['String']['input']>;
-  sort?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryCurrencyByIdArgs = {
+export type QueryOrderByIdArgs = {
   id: Scalars['ID']['input'];
 };
 
 
-export type QueryCustomerByIdArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryCustomersArgs = {
-  direction?: InputMaybe<Scalars['String']['input']>;
-  page?: InputMaybe<Scalars['Int']['input']>;
-  perPage?: InputMaybe<Scalars['Int']['input']>;
-  search?: InputMaybe<Scalars['String']['input']>;
-  sort?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryPaymentFormByIdArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryPaymentFormsArgs = {
+export type QueryOrdersArgs = {
   direction?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
   perPage?: InputMaybe<Scalars['Int']['input']>;
@@ -244,6 +191,29 @@ export type QueryPaymentMethodsArgs = {
   perPage?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryProductByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryProductsArgs = {
+  direction?: InputMaybe<Scalars['String']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Salesperson = {
+  __typename?: 'Salesperson';
+  createdAt: Scalars['String']['output'];
+  deletedAt: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['String']['output'];
 };
 
 
@@ -318,40 +288,42 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Address: ResolverTypeWrapper<Address>;
-  AddressInput: AddressInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  Currency: ResolverTypeWrapper<Currency>;
-  CurrencyInput: CurrencyInput;
   Customer: ResolverTypeWrapper<Customer>;
-  CustomerInput: CustomerInput;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  ListParams: ResolverTypeWrapper<ListParams>;
   Mutation: ResolverTypeWrapper<{}>;
-  PaymentForm: ResolverTypeWrapper<PaymentForm>;
-  PaymentFormInput: PaymentFormInput;
+  Order: ResolverTypeWrapper<Order>;
+  OrderInput: OrderInput;
   PaymentMethod: ResolverTypeWrapper<PaymentMethod>;
   PaymentMethodInput: PaymentMethodInput;
+  Product: ResolverTypeWrapper<Product>;
+  ProductInput: ProductInput;
   Query: ResolverTypeWrapper<{}>;
+  Salesperson: ResolverTypeWrapper<Salesperson>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Address: Address;
-  AddressInput: AddressInput;
   Boolean: Scalars['Boolean']['output'];
-  Currency: Currency;
-  CurrencyInput: CurrencyInput;
   Customer: Customer;
-  CustomerInput: CustomerInput;
+  Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  ListParams: ListParams;
   Mutation: {};
-  PaymentForm: PaymentForm;
-  PaymentFormInput: PaymentFormInput;
+  Order: Order;
+  OrderInput: OrderInput;
   PaymentMethod: PaymentMethod;
   PaymentMethodInput: PaymentMethodInput;
+  Product: Product;
+  ProductInput: ProductInput;
   Query: {};
+  Salesperson: Salesperson;
   String: Scalars['String']['output'];
 };
 
@@ -362,15 +334,6 @@ export type AddressResolvers<ContextType = any, ParentType extends ResolversPare
   state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   street?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   zipCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CurrencyResolvers<ContextType = any, ParentType extends ResolversParentTypes['Currency'] = ResolversParentTypes['Currency']> = {
-  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -388,24 +351,33 @@ export type CustomerResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  deleteCurrency?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCurrencyArgs, 'id'>>;
-  deletePaymentForm?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeletePaymentFormArgs, 'id'>>;
-  deletePaymentMethod?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeletePaymentMethodArgs, 'id'>>;
-  saveCurrency?: Resolver<ResolversTypes['Currency'], ParentType, ContextType, RequireFields<MutationSaveCurrencyArgs, 'input'>>;
-  saveCustomer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType, RequireFields<MutationSaveCustomerArgs, 'input'>>;
-  savePaymentForm?: Resolver<ResolversTypes['PaymentForm'], ParentType, ContextType, RequireFields<MutationSavePaymentFormArgs, 'input'>>;
-  savePaymentMethod?: Resolver<ResolversTypes['PaymentMethod'], ParentType, ContextType, RequireFields<MutationSavePaymentMethodArgs, 'input'>>;
-  updateCurrency?: Resolver<ResolversTypes['Currency'], ParentType, ContextType, RequireFields<MutationUpdateCurrencyArgs, 'id' | 'input'>>;
-  updatePaymentForm?: Resolver<ResolversTypes['PaymentForm'], ParentType, ContextType, RequireFields<MutationUpdatePaymentFormArgs, 'id' | 'input'>>;
-  updatePaymentMethod?: Resolver<ResolversTypes['PaymentMethod'], ParentType, ContextType, RequireFields<MutationUpdatePaymentMethodArgs, 'id' | 'input'>>;
+export type ListParamsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ListParams'] = ResolversParentTypes['ListParams']> = {
+  direction?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  page?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  perPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  search?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  sort?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PaymentFormResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentForm'] = ResolversParentTypes['PaymentForm']> = {
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  deletePaymentMethod?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeletePaymentMethodArgs, 'id'>>;
+  deleteProduct?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'id'>>;
+  saveOrder?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<MutationSaveOrderArgs, 'input'>>;
+  savePaymentMethod?: Resolver<ResolversTypes['PaymentMethod'], ParentType, ContextType, RequireFields<MutationSavePaymentMethodArgs, 'input'>>;
+  saveProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationSaveProductArgs, 'input'>>;
+  updatePaymentMethod?: Resolver<ResolversTypes['PaymentMethod'], ParentType, ContextType, RequireFields<MutationUpdatePaymentMethodArgs, 'id' | 'input'>>;
+  updateProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'id' | 'input'>>;
+};
+
+export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = {
+  canceledAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  salesperson?: Resolver<ResolversTypes['Salesperson'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -419,25 +391,48 @@ export type PaymentMethodResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  deletedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  depth?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  unit?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  width?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  currencies?: Resolver<Array<Maybe<ResolversTypes['Currency']>>, ParentType, ContextType, RequireFields<QueryCurrenciesArgs, 'direction' | 'page' | 'perPage' | 'search' | 'sort'>>;
-  currencyById?: Resolver<ResolversTypes['Currency'], ParentType, ContextType, RequireFields<QueryCurrencyByIdArgs, 'id'>>;
-  customerById?: Resolver<ResolversTypes['Customer'], ParentType, ContextType, RequireFields<QueryCustomerByIdArgs, 'id'>>;
-  customers?: Resolver<Array<Maybe<ResolversTypes['Customer']>>, ParentType, ContextType, RequireFields<QueryCustomersArgs, 'direction' | 'page' | 'perPage' | 'search' | 'sort'>>;
-  paymentFormById?: Resolver<ResolversTypes['PaymentForm'], ParentType, ContextType, RequireFields<QueryPaymentFormByIdArgs, 'id'>>;
-  paymentForms?: Resolver<Array<Maybe<ResolversTypes['PaymentForm']>>, ParentType, ContextType, RequireFields<QueryPaymentFormsArgs, 'direction' | 'page' | 'perPage' | 'search' | 'sort'>>;
+  orderById?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<QueryOrderByIdArgs, 'id'>>;
+  orders?: Resolver<Array<Maybe<ResolversTypes['Order']>>, ParentType, ContextType, RequireFields<QueryOrdersArgs, 'direction' | 'page' | 'perPage' | 'search' | 'sort'>>;
   paymentMethodById?: Resolver<ResolversTypes['PaymentMethod'], ParentType, ContextType, RequireFields<QueryPaymentMethodByIdArgs, 'id'>>;
   paymentMethods?: Resolver<Array<Maybe<ResolversTypes['PaymentMethod']>>, ParentType, ContextType, RequireFields<QueryPaymentMethodsArgs, 'direction' | 'page' | 'perPage' | 'search' | 'sort'>>;
+  productById?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<QueryProductByIdArgs, 'id'>>;
+  products?: Resolver<Array<Maybe<ResolversTypes['Product']>>, ParentType, ContextType, RequireFields<QueryProductsArgs, 'direction' | 'page' | 'perPage' | 'search' | 'sort'>>;
+};
+
+export type SalespersonResolvers<ContextType = any, ParentType extends ResolversParentTypes['Salesperson'] = ResolversParentTypes['Salesperson']> = {
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  deletedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Address?: AddressResolvers<ContextType>;
-  Currency?: CurrencyResolvers<ContextType>;
   Customer?: CustomerResolvers<ContextType>;
+  ListParams?: ListParamsResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
-  PaymentForm?: PaymentFormResolvers<ContextType>;
+  Order?: OrderResolvers<ContextType>;
   PaymentMethod?: PaymentMethodResolvers<ContextType>;
+  Product?: ProductResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Salesperson?: SalespersonResolvers<ContextType>;
 };
 
