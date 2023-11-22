@@ -4,7 +4,7 @@
 .pnp.js
 
 # production
-/dist
+/build
 
 # misc
 .DS_Store
@@ -41,5 +41,3 @@ yarn-error.log*
 
 # git
 .history
-
-src/types/graphql.ts

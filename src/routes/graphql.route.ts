@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import { resolve } from 'node:path'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import express from 'express'
-import { graphqlHTTP } from 'express-graphql'
+import { createHandler } from 'graphql-http/lib/use/express'
 
 import { resolvers } from '../resolvers'
 
@@ -19,8 +19,7 @@ const router = express.Router()
 
 router.use(
   '/graphql',
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  graphqlHTTP({
+  createHandler({
     schema,
   }),
 )
