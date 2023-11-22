@@ -33,7 +33,7 @@ yarn-error.log*
 !.vscode/extensions.json
 
 # env files
-.env*
+.env.example
 !.env.example
 
 # typescript
@@ -41,3 +41,6 @@ yarn-error.log*
 
 # git
 .history
+
+# database
+*.sqlite*

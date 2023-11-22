@@ -10,16 +10,7 @@ async function seedSalesperson(length: number = 100) {
 
   }))
 
-  const salespersons = []
-
-  for (const salesperson of data) {
-    const newSalesperson = await prisma.salesperson.create({
-      data: salesperson as any,
-    })
-    salespersons.push(newSalesperson)
-  }
-
-  return salespersons
+  return data.map((salesperson) => prisma.salesperson.create({ data: salesperson as any }))
 }
 
 async function seedCustomers(length: number = 100) {
@@ -58,7 +49,7 @@ async function seedAddresses(length: number = 100, customer_id: string) {
     zip_code: faker.location.zipCode(),
   }))
 
-  await prisma.address.createMany({
+  await prisma.address.create({
      data: data as any,
   })
 }
@@ -73,9 +64,7 @@ async function seedProducts(length: number = 100) {
     width: faker.number.float({ max: 1000, min: 0 }),
   }))
 
-  return prisma.product.createMany({
-    data,
-  })
+  return data.map((product) => prisma.product.create({ data: product as any }))
 }
 
 async function seedPricing(length: number = 3, currency_id: string) {
@@ -88,7 +77,7 @@ async function seedPricing(length: number = 3, currency_id: string) {
     valid_to: faker.date.future(),
   }))
 
-  await prisma.pricingTable.createMany({
+  await prisma.pricingTable.create({
     data: data as any,
   })
 
@@ -118,8 +107,8 @@ async function seedCurrency() {
     name,
   }))
 
-  return prisma.currency.createMany({
-    data,
+  return prisma.currency.create({
+    data: data as any,
   })
 }
 
@@ -133,8 +122,8 @@ async function seedPriceItem() {
     product_id: product.id,
   }))
 
-  return prisma.priceItem.createMany({
-    data,
+  return prisma.priceItem.create({
+    data: data as any,
   })
 }
 
@@ -168,7 +157,7 @@ async function seedPaymentMethod() {
     },
   ]
 
-  await prisma.paymentMethod.createMany({
+  await prisma.paymentMethod.create({
     data: data as any,
   })
 
@@ -186,7 +175,7 @@ async function seedPaymentForm() {
     },
   ]
 
-  await prisma.paymentForm.createMany({
+  await prisma.paymentForm.create({
     data: data as any,
   })
 

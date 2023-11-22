@@ -2,12 +2,11 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -82,8 +81,6 @@ model product {
   deletedAt DateTime?
   priceItem priceItem[]
   orderItem orderItem[]
-
-  @@fulltext([name, code])
 }
 
 model priceItem {
