@@ -10,7 +10,7 @@ const schema = z.object({
   search: z.string().optional(),
 })
 
-export function validateListParams(params: ListParams) {
+export function listParamsValidation(params: ListParams) {
   const { direction, page, perPage, sort, search } = schema.parse(params)
 
   return {

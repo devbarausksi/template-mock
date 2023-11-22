@@ -59,7 +59,7 @@ async function seedAddresses(length: number = 100, customer_id: string) {
   }))
 
   await prisma.address.createMany({
-    data,
+     data: data as any,
   })
 }
 
@@ -88,8 +88,8 @@ async function seedPricing(length: number = 3, currency_id: string) {
     valid_to: faker.date.future(),
   }))
 
-  await prisma.pricing_table.createMany({
-    data,
+  await prisma.pricingTable.createMany({
+    data: data as any,
   })
 
   return data
@@ -125,7 +125,7 @@ async function seedCurrency() {
 
 async function seedPriceItem() {
   const products = await prisma.product.findMany()
-  const pricingTable = await prisma.pricing_table.findFirst()
+  const pricingTable = await prisma.pricingTable.findFirst()
 
   const data = products.map((product: { id: any }) => ({
     price: faker.number.float({ max: 1000, min: 0 }),
@@ -133,7 +133,7 @@ async function seedPriceItem() {
     product_id: product.id,
   }))
 
-  return prisma.price_item.createMany({
+  return prisma.priceItem.createMany({
     data,
   })
 }
@@ -168,8 +168,8 @@ async function seedPaymentMethod() {
     },
   ]
 
-  await prisma.payment_method.createMany({
-    data,
+  await prisma.paymentMethod.createMany({
+    data: data as any,
   })
 
   return data
@@ -186,8 +186,8 @@ async function seedPaymentForm() {
     },
   ]
 
-  await prisma.payment_form.createMany({
-    data,
+  await prisma.paymentForm.createMany({
+    data: data as any,
   })
 
   return data
@@ -198,10 +198,10 @@ async function main() {
     prisma.address.deleteMany(),
     prisma.customer.deleteMany(),
     prisma.product.deleteMany(),
-    prisma.pricing_table.deleteMany(),
-    prisma.price_item.deleteMany(),
-    prisma.payment_method.deleteMany(),
-    prisma.payment_form.deleteMany(),
+    prisma.pricingTable.deleteMany(),
+    prisma.priceItem.deleteMany(),
+    prisma.paymentMethod.deleteMany(),
+    prisma.paymentForm.deleteMany(),
     prisma.salesperson.deleteMany(),
   ])
 

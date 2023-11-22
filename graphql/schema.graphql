@@ -1,5 +1,7 @@
 # This file was generated. Do not edit manually.
 
+scalar Date
+
 schema {
     query: Query
     mutation: Mutation
@@ -14,11 +16,11 @@ type ListParams {
 }
 
 type PaymentMethod {
-    createdAt: String!
+    createdAt: Date!
     id: ID!
     name: String!
     paymentTerm: [Int]!
-    updatedAt: String!
+    updatedAt: Date!
 }
 
 input PaymentMethodInput {
@@ -39,7 +41,7 @@ type Address {
 " A Customer "
 type Customer {
     addresses: [Address]!
-    createdAt: String!
+    createdAt: Date!
     document: String!
     email: String!
     id: ID!
@@ -47,7 +49,7 @@ type Customer {
     name: String!
     phone: String!
     type: String!
-    updatedAt: String!
+    updatedAt: Date!
 }
 
 type Product {
@@ -58,17 +60,17 @@ type Product {
     width: Float!
     depth: Float!
     unit: String!
-    updatedAt: String!
-    createdAt: String!
-    deletedAt: String!
+    updatedAt: Date!
+    createdAt: Date!
+    deletedAt: Date!
 }
 
 type Salesperson {
     id: ID!
     name: String!
-    createdAt: String!
-    updatedAt: String!
-    deletedAt: String!
+    createdAt: Date!
+    updatedAt: Date!
+    deletedAt: Date!
 }
 
 type Order {
@@ -76,9 +78,9 @@ type Order {
     number: Int!
     salesperson: Salesperson!
     customer: Customer!
-    createdAt: String!
-    updatedAt: String!
-    canceledAt: String!
+    createdAt: Date!
+    updatedAt: Date!
+    canceledAt: Date!
 }
 
 input OrderInput {

@@ -1,17 +1,18 @@
 {
   "scripts": {
-    "build": "npx tsc",
-    "prebuild": "rimraf dist/",
-    "postbuild": "copyfiles -u 1 graphql/* dist/graphql",
-    "start": "node dist/index.js",
-    "watch": "npx nodemon --exec \"npm run postbuild && npm run start\"",
-    "dev": "npx concurrently \"npm run codegen:watch\" \"npm run build -- --watch\" \"npm run watch\"",
-    "codegen": "graphql-codegen --config codegen.ts",
-    "codegen:watch": "graphql-codegen --config codegen.ts --watch",
-    "prepare": "husky install",
+    "start": "yarn build && pm2 start ecosystem.config.json --no-daemon",
+    "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier --check **/*.ts",
+    "prettier:fix": "prettier --write **/*.ts",
     "db:push": "prisma db push --force-reset",
-    "db:seed": "tsc --allowJs prisma/seed.ts && cat prisma/seed.js | node && rm prisma/seed.js",
-    "db:reset": "npm run db:push && npm run db:seed"
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate",
+    "prepare": "husky install",
+    "codegen": "graphql-codegen --config codegen.ts",
+    "build": "rimraf build && tsc -p tsconfig.json && copyfiles -u 1 \"graphql/*.graphql\" build/graphql"
   },
   "dependencies": {
     "@faker-js/faker": "^8.3.1",
@@ -23,6 +24,7 @@
     "graphql": "^15.8.0",
     "morgan": "^1.10.0",
     "prisma": "^5.6.0",
+    "winston": "^3.11.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -40,16 +42,20 @@
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "@typescript-eslint/parser": "^6.12.0",
     "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
     "devmoji": "^2.3.0",
+    "dotenv": "^16.3.1",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "husky": "^8.0.0",
+    "nodemon": "^3.0.1",
     "rimraf": "^5.0.5",
+    "ts-node": "^10.9.1",
     "typescript": "^5.3.2"
   },
   "prisma": {
-    "seed": "tsc --allowJs prisma/seed.ts && cat prisma/seed.js | node && rm prisma/seed.js"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "nodemonConfig": {
     "watch": [

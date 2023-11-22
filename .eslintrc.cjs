@@ -4,6 +4,8 @@ module.exports = {
     parserOptions: {
         project: true,
         tsconfigRootDir: __dirname,
+        "ecmaVersion": 2018,
+        "sourceType": "module"
     },
     "env": {
         "node": true

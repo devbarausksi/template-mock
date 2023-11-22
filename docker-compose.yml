@@ -6,7 +6,7 @@ services:
     container_name: ksm-mocker
     command: sh .docker/entrypoint.dev.sh
     env_file:
-      - .env
+      - .env.docker
     build:
       context: .
       dockerfile: .docker/Dockerfile

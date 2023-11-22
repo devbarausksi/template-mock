@@ -1,17 +1,19 @@
-import { prisma } from '../prisma'
+import prisma from '../database'
 import { type ListParams, type UniqueParams } from '../types'
-import { validateListParams } from '../validators/validate-list-params'
+import { listParamsValidation } from '../validations/list-params.validation'
 
 export const SalespersonQuery = {
   salespersonById: async (_: any, params: UniqueParams) => {
-    return prisma.salesperson.findUnique({
+    const item = await prisma.salesperson.findUnique({
       where: {
         id: params.id,
       },
     })
+
+    return item
   },
   salesperson: async (_: any, listParams: ListParams) => {
-    const { offset, orderBy, limit } = validateListParams(listParams)
+    const { offset, orderBy, limit } = listParamsValidation(listParams)
 
     return prisma.salesperson.findMany({
       skip: offset,

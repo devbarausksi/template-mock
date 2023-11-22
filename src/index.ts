@@ -1,50 +1,40 @@
-import { makeExecutableSchema } from '@graphql-tools/schema'
-import cors from 'cors'
-import express, { type Express } from 'express'
-import { graphqlHTTP } from 'express-graphql'
-import morgan from 'morgan'
+import { type Server } from 'http'
 
-import { defs } from './defs'
-import { resolvers } from './resolvers'
+import app from './app'
+import config from './config'
+import logger from './config/logger'
+import prisma from './database'
 
-const app: Express = express()
-const port = process.env.PORT || 4000
-
-const schema = makeExecutableSchema({
-  typeDefs: defs,
-  resolvers,
+let server: Server
+prisma.$connect().then(() => {
+  logger.info('🦺: Database is connected')
+  server = app.listen(config.port, () => {
+    logger.info(`👔: Server is running at http://localhost:${config.port}`)
+  })
 })
 
-app.use(
-  '/graphql',
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  graphqlHTTP({
-    schema,
-  }),
-)
+const exitHandler = () => {
+  if (server) {
+    server.close(() => {
+      logger.info('Server closed')
+      process.exit(1)
+    })
+  } else {
+    process.exit(1)
+  }
+}
 
-app.get('/graphiql', (req, res) => {
-  res.send(`
-  <div id="sandbox" style="position:absolute;top:0;right:0;bottom:0;left:0"></div>
-  <script src="https://embeddable-sandbox.cdn.apollographql.com/_latest/embeddable-sandbox.umd.production.min.js"></script>
-  <script>
-   new window.EmbeddedSandbox({
-     target: "#sandbox",
-     // Pass through your server href if you are embedding on an endpoint.
-     // Otherwise, you can pass whatever endpoint you want Sandbox to start up with here.
-     initialEndpoint: '/graphql',
-   });
-   // advanced options: https://www.apollographql.com/docs/studio/explorer/sandbox#embedding-sandbox
-  </script>
-  `)
-})
+const unexpectedErrorHandler = (error: unknown) => {
+  logger.error(error)
+  exitHandler()
+}
 
-app.use(morgan('dev'))
-app.use(cors())
+process.on('uncaughtException', unexpectedErrorHandler)
+process.on('unhandledRejection', unexpectedErrorHandler)
 
-app.listen(port, () => {
-  // eslint-disable-next-line no-console
-  console.log(
-    `⚡️[server]: Server is running at http://localhost:${port}/graphiql`,
-  )
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received')
+  if (server) {
+    server.close()
+  }
 })
