@@ -1,12 +1,10 @@
-import { OrderMutation, OrderQuery } from './order'
-import { SalespersonQuery } from './salesperson'
+import { ExampleMutation, ExampleQuery } from './example'
 
 export const resolvers = {
   Query: {
-    ...OrderQuery,
-    ...SalespersonQuery,
+    ...ExampleQuery,
   },
   Mutation: {
-    ...OrderMutation,
+    ...ExampleMutation,
   },
 }
